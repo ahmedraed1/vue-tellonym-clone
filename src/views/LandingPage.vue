@@ -36,21 +36,26 @@
           class="w-24"
         />
         <h3 class="text-3xl font-bold">Create an account</h3>
+
         <button
+          @click="$router.push('/login')"
           class="w-80 h-14 rounded-3xl bg-blue-500 text-black font-bold shadow-lg"
           style="background-color: rgb(255, 255, 255)"
         >
           Sign In
         </button>
+
         <button
           class="w-80 h-14 rounded-3xl bg-blue-500 text-black font-bold shadow-lg"
           style="background-color: rgb(235, 235, 237)"
+          @click="$router.push('/signup')"
         >
           Sign Up with Email
         </button>
         <span class="block text-sm text-gray-500"
           >Already have an account?<span
             class="font-bold text-gray-900 cursor-pointer"
+            @click="$router.push('/login')"
           >
             Sign in</span
           ></span
