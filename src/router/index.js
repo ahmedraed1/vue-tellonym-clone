@@ -1,8 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import FeedsView from '../views/FeedView.vue'
 import LandingPage from '@/views/LandingPage.vue'
 import LoginView from '@/views/registrationPages/LoginView.vue'
 import SignView from '@/views/registrationPages/SignView.vue'
+import SearchView from '@/views/SearchView.vue'
+import TellsView from '@/views/TellsView.vue'
+import NotificationsView from '@/views/NotificationsView.vue'
+import ProfileView from '@/views/ProfileView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,9 +17,29 @@ const router = createRouter({
       component: LandingPage,
     },
     {
-      path: '/home',
-      name: 'home',
-      component: HomeView,
+      path: '/feed',
+      name: 'feed',
+      component: FeedsView,
+    },
+    {
+      path: '/search',
+      name: 'search',
+      component: SearchView,
+    },
+    {
+      path: '/tells',
+      name: 'tells',
+      component: TellsView,
+    },
+    {
+      path: '/notifications',
+      name: 'notifications',
+      component: NotificationsView,
+    },
+    {
+      path: '/:id',
+      name: 'profile',
+      component: ProfileView,
     },
     {
       path: '/login',
@@ -26,6 +50,12 @@ const router = createRouter({
       path: '/signup',
       name: 'signup',
       component: SignView,
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: () => import('@/views/NotFoundView.vue'),
+      // redirect: '/',
     },
     // {
     //   path: '/about',
