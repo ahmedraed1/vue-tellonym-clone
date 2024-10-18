@@ -31,7 +31,7 @@
             type="text"
             placeholder="Email or Username"
             class="input-email"
-            v-model="emailOrUsername"
+            v-model="email"
           />
           <input
             type="text"
@@ -40,8 +40,9 @@
             v-model="password"
           />
           <button
+            @click="submit"
             class="submit-button"
-            :disabled="!emailOrUsername || !password"
+            :disabled="!email || !password"
           >
             Submit
           </button>
@@ -58,8 +59,13 @@
 <script setup>
 import { ref } from 'vue'
 
-const emailOrUsername = ref('')
-const password = ref('')
+import { useLogin } from '@/methods/registration'
+
+const email = ref('ahmedraed101@yahoo.com')
+const password = ref('admin100*A')
+const submit = async () => {
+  await useLogin(email.value, password.value)
+}
 </script>
 
 <style scoped>

@@ -25,7 +25,7 @@
       </div>
       <!-- inputs -->
       <div class="inputs-container basis-3/4">
-        <div class="inputs-container-box">
+        <div class="inputs-container-box" v-if="steps == 1">
           <h3 class="text-3xl font-bold mb-4">tellonym.me/{{ username }}</h3>
           <input
             type="text"
@@ -56,16 +56,46 @@
           </div>
 
           <button
+            @click="steps = 2"
             class="submit-button"
             :disabled="IsAgree == false || username == ''"
           >
             Next
           </button>
-          <!-- <div class="flex justify-center w-full">
-            <span class="block text-sm text-red-500 text-center"
-              >I don't have an account.
-            </span>
-          </div> -->
+        </div>
+        <div class="inputs-container-box" v-if="steps == 2">
+          <h3 class="text-3xl font-bold mb-4">Email and Password</h3>
+          <input
+            type="text"
+            placeholder="email"
+            class="input-email"
+            v-model="email"
+          />
+          <input
+            type="text"
+            placeholder="Password"
+            class="input-password"
+            v-model="password"
+          />
+          <button
+            @click="steps = 3"
+            class="submit-button"
+            :disabled="email == '' || password == ''"
+          >
+            Next
+          </button>
+        </div>
+        <div class="inputs-container-box" v-if="steps == 3">
+          <h3 class="text-3xl font-bold mb-4">What is your name ?</h3>
+          <input
+            type="text"
+            placeholder="Name"
+            class="input-name"
+            v-model="name"
+          />
+          <button @click="submit" class="submit-button" :disabled="name == ''">
+            Next
+          </button>
         </div>
       </div>
     </div>
@@ -73,9 +103,24 @@
 </template>
 <script setup>
 import { ref } from 'vue'
+import { useRegister } from '@/methods/registration'
 
+const name = ref('')
 const username = ref('')
 const IsAgree = ref(false)
+const email = ref('')
+const password = ref('')
+const steps = ref(1)
+
+const submit = async () => {
+  await useRegister(
+    name.value,
+    username.value,
+    IsAgree.value,
+    email.value,
+    password.value,
+  )
+}
 </script>
 
 <style scoped>
@@ -125,6 +170,8 @@ div > header > div {
   padding-right: 10px;
 }
 .inputs-container-box > .input-username,
+.inputs-container-box > .input-email,
+.inputs-container-box > .input-name,
 .inputs-container-box > .input-password {
   width: 100%;
   height: 40px;

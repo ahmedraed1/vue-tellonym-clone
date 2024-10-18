@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue'
+import { ref } from 'vue'
 
 const props = defineProps(['src', 'username', 'bio'])
 const img_src = ref(props.src)
