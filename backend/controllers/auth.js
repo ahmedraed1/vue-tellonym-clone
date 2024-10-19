@@ -14,9 +14,13 @@ const login = async (req, res) => {
     if (!isPasswordCorrect) {
       return res.status(401).json({ message: 'Invalid password' })
     }
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_LIFT_TIME,
-    })
+    const token = jwt.sign(
+      { userId: user._id, name: user.name },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: process.env.JWT_LIFT_TIME,
+      },
+    )
     res
       .status(StatusCodes.OK)
       .json({ message: 'Login successful', user, token })
@@ -39,7 +43,7 @@ const register = async (req, res) => {
     const token = await user.createJWT()
     res.status(StatusCodes.CREATED).json({
       message: 'User created successfully',
-      user: { name: user.name, email: user.email },
+      user,
       token,
     })
   } catch (error) {

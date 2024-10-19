@@ -28,7 +28,7 @@
               alt=""
             />
           </li>
-          <li @click="$router.push('/profile')">
+          <li @click="$router.push(`/${useAuthUser().user.username}`)">
             <img
               src="https://upload.wikimedia.org/wikipedia/commons/4/49/A_black_image.jpg"
               alt="profile"
@@ -40,7 +40,9 @@
     </header>
   </div>
 </template>
-<script setup></script>
+<script setup>
+import { useAuthUser } from '@/stores/auth'
+</script>
 <style scoped>
 .feeds-page-header {
   height: 50px;

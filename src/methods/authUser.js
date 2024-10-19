@@ -1,5 +1,5 @@
 import axios from 'axios'
-import router from '@/router'
+import { useAuthUser } from '@/stores/auth'
 
 const authUser = async () => {
   const token = localStorage.getItem('token')
@@ -8,18 +8,11 @@ const authUser = async () => {
       Authorization: `Bearer ${token}`,
     },
   }
-  const response = await axios.get('/api/v1/data/names', config).catch(err => {
-    if (router.currentRoute.value.path == '/login') {
-      router.push('/login')
-      console.log(err.response.data.msg)
-    } else {
-      router.push('/')
-    }
+  const response = await axios.get('/api/v1/user/auth', config).catch(err => {
     return err.response
   })
-  if (response.status === 200) {
-    return response.data
-  }
+
+  useAuthUser().setUser(response.data.user)
   return response
 }
 

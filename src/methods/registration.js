@@ -14,6 +14,7 @@ const useLogin = async (email, password) => {
     })
   if (response.status === 200) {
     localStorage.setItem('token', response.data.token)
+    useAuthUser().setUser(response.data.user)
     router.push('/feed')
   }
   return response.data

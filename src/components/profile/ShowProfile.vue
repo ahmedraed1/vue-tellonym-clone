@@ -4,6 +4,8 @@
       src="/tellonym-icons-color/icons8-settings.svg"
       alt=""
       class="settings-img"
+      @click="$router.push(`${$route.params.username}/settings`)"
+      v-if="isAdmin"
     />
 
     <img
@@ -29,7 +31,8 @@
         </div>
       </div>
     </div>
-    <button class="edit-button">Edit Profile</button>
+    <button class="edit-button" v-if="isAdmin">Edit Profile</button>
+    <button class="edit-button" v-if="!isAdmin">Follow</button>
     <div class="tell-box">
       <textarea
         name="tell"
@@ -62,6 +65,10 @@
 import { ref } from 'vue'
 
 const isPublicTell = ref(true)
+
+defineProps({
+  isAdmin: Boolean,
+})
 </script>
 <style scoped>
 .profile-box {
@@ -85,6 +92,7 @@ const isPublicTell = ref(true)
   position: absolute;
   top: 20px;
   right: 20px;
+  cursor: pointer;
 }
 .profile-img {
   width: 100px;
