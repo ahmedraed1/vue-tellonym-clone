@@ -14,8 +14,8 @@
       class="profile-img"
     />
     <div class="information-box flex flex-col items-center">
-      <h2 class="text-xl font-bold">Name</h2>
-      <span class="text-sm">@username</span>
+      <h2 class="text-xl font-bold">{{ user.name }}</h2>
+      <span class="text-sm">@{{ user.username }}</span>
       <div class="numbers-box flex h-fit">
         <div>
           <span>0</span>
@@ -39,32 +39,76 @@
         cols="30"
         rows="10"
         placeholder="Send me anonymous messages..."
+        v-model="tell.tell"
       ></textarea>
       <div
         class="flex items-center justify-between flex-row px-4 pb-2 flex-wrap"
       >
         <label class="inline-flex items-center cursor-pointer">
-          <input type="checkbox" v-model="isPublicTell" class="sr-only peer" />
+          <input type="checkbox" v-model="isPrivate" class="sr-only peer" />
           <div
             class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
           ></div>
           <span class="ms-3 text-sm font-medium text-gray-400"
             >Your message is
             <span class="font-bold text-gray-600">{{
-              isPublicTell ? 'anonymous' : 'public'
+              isPrivate ? 'anonymous' : 'public'
             }}</span></span
           >
         </label>
-        <button class="send-button">Send</button>
+        <button class="send-button" @click="sendTell">Send</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import axios from 'axios'
 
-const isPublicTell = ref(true)
+const $route = useRoute()
+const isPrivate = ref(true)
+const user = ref({
+  name: '',
+  username: '',
+})
+const tell = ref({
+  tell: '',
+  isPrivate: isPrivate.value,
+  toUser: '',
+})
+
+onMounted(async () => {
+  await getUser()
+})
+
+const getUser = async () => {
+  const { data } = await axios.get(`/api/v1/users/${$route.params.username}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  })
+  user.value = data
+  tell.value.toUser = user.value._id
+}
+
+watch($route, async () => {
+  await getUser()
+})
+
+const sendTell = async () => {
+  await axios
+    .post('/api/v1/tells', tell.value, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    })
+    .then(res => {
+      tell.value.tell = ''
+      console.log(res.data.message)
+    })
+}
 
 defineProps({
   isAdmin: Boolean,

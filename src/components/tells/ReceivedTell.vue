@@ -1,7 +1,7 @@
 <template>
   <div class="tell flex flex-col">
     <div class="flex flex-row justify-between h-fit">
-      <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </span>
+      <slot name="tell"></slot>
       <img
         src="/tellonym-icons-color/icons8-more-24.png"
         alt=""
@@ -14,7 +14,7 @@
         alt=""
         class="comment-image"
       />
-      <span>26 minutes ago</span>
+      <slot name="date"></slot>
     </div>
   </div>
 </template>

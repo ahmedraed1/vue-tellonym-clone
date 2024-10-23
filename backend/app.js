@@ -24,8 +24,13 @@ app.use(express.urlencoded({ extended: true }))
 // routes
 const authRouter = require('./routes/auth')
 const userData = require('./routes/userData')
+const TellsRouter = require('./routes/tells')
+const usersRouter = require('./routes/users')
+
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/user', authenticationUser, userData)
+app.use('/api/v1/tells', authenticationUser, TellsRouter)
+app.use('/api/v1/users', authenticationUser, usersRouter)
 
 app.get('/', (req, res) => {
   res.send('Hello World!')

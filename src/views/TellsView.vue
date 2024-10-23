@@ -10,71 +10,42 @@
       </div>
     </div>
     <div class="tells">
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
-      <ReceivedTell />
+      <ReceivedTell v-for="(tell, index) in tells" :key="index">
+        <template #tell>
+          <span>{{ tell.tell }}</span>
+        </template>
+        <template #date>
+          <span>{{ timeAgo(tell.createdAt) }}</span>
+        </template>
+      </ReceivedTell>
     </div>
   </div>
 </template>
 
 <script setup>
 import ReceivedTell from '@/components/tells/ReceivedTell.vue'
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+import timeAgo from '@/methods/time'
+
+const tells = ref([])
+
+onMounted(async () => {
+  await getTells()
+})
+
+const getTells = async () => {
+  await axios
+    .get('/api/v1/tells', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(response => {
+      tells.value = response.data.tells
+    })
+}
 </script>
 <style scoped>
 .received-tell-link {

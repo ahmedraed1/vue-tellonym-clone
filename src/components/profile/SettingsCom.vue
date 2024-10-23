@@ -51,6 +51,7 @@
       <button
         type="button"
         class="relative inline-flex items-center w-full px-4 py-5 text-xl font-medium border-b border-gray-200 rounded-t-lg"
+        @click="logout"
       >
         <img
           src="/tellonym-icons-color/settings-icons/logout-svgrepo-com (1).svg"
@@ -63,7 +64,12 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+const logout = () => {
+  localStorage.removeItem('token')
+  location.reload()
+}
+</script>
 
 <style scoped>
 .settings-box {

@@ -1,6 +1,7 @@
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
+const Followers = require('../models/Followers')
 const { StatusCodes } = require('http-status-codes')
 
 const login = async (req, res) => {
@@ -41,6 +42,7 @@ const register = async (req, res) => {
       isAgree,
     })
     const token = await user.createJWT()
+    await Followers.create({ user: user._id })
     res.status(StatusCodes.CREATED).json({
       message: 'User created successfully',
       user,
