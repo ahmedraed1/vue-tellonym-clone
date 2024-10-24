@@ -3,7 +3,7 @@
     <div class="flex items-center gap-3">
       <img :src="img_src" alt="profile" class="w-12 h-12 rounded-full" />
       <div class="flex flex-col">
-        <span class="text-sm font-bold">{{ username }}</span>
+        <span class="text-sm font-bold">{{ name }}</span>
         <span class="text-xs text-gray-400 font-bold">{{
           bio.slice(0, 50) + '...'
         }}</span>
@@ -16,7 +16,7 @@
 <script setup>
 import { ref } from 'vue'
 
-const props = defineProps(['src', 'username', 'bio'])
+const props = defineProps(['src', 'name', 'bio'])
 const img_src = ref(props.src)
 </script>
 

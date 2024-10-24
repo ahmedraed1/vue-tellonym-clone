@@ -18,7 +18,7 @@
       <span class="text-sm">@{{ user.username }}</span>
       <div class="numbers-box flex h-fit">
         <div>
-          <span>0</span>
+          <span>{{ Friends.follower.length }}</span>
           <span>Followers</span>
         </div>
         <div>
@@ -26,7 +26,7 @@
           <span>Tells</span>
         </div>
         <div>
-          <span>0</span>
+          <span>{{ Friends.following.length }}</span>
           <span>Following</span>
         </div>
       </div>
@@ -65,6 +65,7 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import getFriends from '@/methods/users'
 import axios from 'axios'
 
 const $route = useRoute()
@@ -72,6 +73,10 @@ const isPrivate = ref(true)
 const user = ref({
   name: '',
   username: '',
+})
+const Friends = ref({
+  follower: 0,
+  following: 0,
 })
 const tell = ref({
   tell: '',
@@ -81,6 +86,9 @@ const tell = ref({
 
 onMounted(async () => {
   await getUser()
+  await getFriends().then(res => {
+    Friends.value = res.users
+  })
 })
 
 const getUser = async () => {
