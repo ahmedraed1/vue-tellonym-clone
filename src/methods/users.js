@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const getFriends = async username => {
-  const { data } = await axios.get(`/api/v1/users/${username}/friends`, {
+const getFriends = async id => {
+  const { data } = await axios.get(`/api/v1/users/${id}/friends`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
@@ -9,4 +9,17 @@ const getFriends = async username => {
   return data
 }
 
-export default getFriends
+const follow = async id => {
+  const { data } = await axios.put(
+    `/api/v1/users/${id}/follow`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    },
+  )
+  return data
+}
+
+export { getFriends, follow }

@@ -32,7 +32,9 @@
       </div>
     </div>
     <button class="edit-button" v-if="isAdmin">Edit Profile</button>
-    <button class="edit-button" v-if="!isAdmin">Follow</button>
+    <button class="edit-button" v-if="!isAdmin" @click="setFollow">
+      Follow
+    </button>
     <div class="tell-box">
       <textarea
         name="tell"
@@ -65,15 +67,12 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import getFriends from '@/methods/users'
+import { getFriends, follow } from '@/methods/users'
 import axios from 'axios'
 
 const $route = useRoute()
 const isPrivate = ref(true)
-const user = ref({
-  name: '',
-  username: '',
-})
+const user = ref({})
 const Friends = ref({
   follower: 0,
   following: 0,
@@ -84,15 +83,9 @@ const tell = ref({
   toUser: '',
 })
 
-onMounted(async () => {
-  await getUser()
-  await getFriends().then(res => {
-    Friends.value = res.users
-  })
-})
-
 const getUser = async () => {
-  const { data } = await axios.get(`/api/v1/users/${$route.params.username}`, {
+  const username = await $route.params.username
+  const { data } = await axios.get(`/api/v1/users/${username}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
@@ -101,8 +94,16 @@ const getUser = async () => {
   tell.value.toUser = user.value._id
 }
 
+onMounted(async () => {
+  await getUser()
+  await getFriends(user.value._id).then(res => {
+    Friends.value = res.users
+  })
+})
+
 watch($route, async () => {
   await getUser()
+  window.location.reload()
 })
 
 const sendTell = async () => {
@@ -116,6 +117,11 @@ const sendTell = async () => {
       tell.value.tell = ''
       console.log(res.data.message)
     })
+}
+
+const setFollow = async () => {
+  const data = await follow(user.value._id)
+  console.log(data.message)
 }
 
 defineProps({

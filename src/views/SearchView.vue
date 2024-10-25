@@ -28,6 +28,8 @@
         :src="`https://upload.wikimedia.org/wikipedia/commons/4/49/A_black_image.jpg`"
         :name="user.name"
         :bio="`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`"
+        @click="$router.push(`/${user.username}`)"
+        class="cursor-pointer"
       >
         <template #button>
           <button
@@ -44,7 +46,7 @@
 import ShowSearchUser from '@/components/users/ShowSearchUser.vue'
 import { ref, onMounted } from 'vue'
 import { useAuthUser } from '@/stores/auth'
-import getFriends from '@/methods/users'
+import { getFriends } from '@/methods/users'
 import axios from 'axios'
 
 const searchInput = ref('')
@@ -67,7 +69,7 @@ const search = async () => {
 }
 
 onMounted(() => {
-  getFriends(user.username).then(res => {
+  getFriends(user._id).then(res => {
     users.value = res.friendObjects.filter((item, index) =>
       index >= 1 && item.username == res.friendObjects[index - 1].username
         ? false

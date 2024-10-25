@@ -61,8 +61,8 @@ import { ref } from 'vue'
 
 import { useLogin } from '@/methods/registration'
 
-const email = ref('example@gmail.com')
-const password = ref('admin100*A')
+const email = ref('example200@gmail.com')
+const password = ref('admin200*A')
 const submit = async () => {
   await useLogin(email.value, password.value)
 }

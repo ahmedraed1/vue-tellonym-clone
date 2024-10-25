@@ -41,6 +41,9 @@ const register = async (req, res) => {
       password,
       isAgree,
     })
+    if (!user) {
+      throw new Error('Something went wrong, User not created :(')
+    }
     const token = await user.createJWT()
     await Followers.create({ user: user._id })
     res.status(StatusCodes.CREATED).json({
