@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="tells">
-      <ReceivedTell v-for="(tell, index) in tells" :key="index">
+      <ReceivedTell v-for="(tell, index) in tells" :key="index" :id="tell._id">
         <template #tell>
           <span>{{ tell.tell }}</span>
         </template>

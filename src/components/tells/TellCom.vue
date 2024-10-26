@@ -8,19 +8,24 @@
           class="tell-image"
         />
         <div class="flex flex-col w-fit">
-          <span class="text-sm font-bold">Tellonym</span>
-          <span class="text-xs text-gray-400 font-bold">10 minutes ago</span>
+          <span class="text-sm font-bold"><slot name="username"></slot></span>
+          <span class="text-xs text-gray-400 font-bold"
+            ><slot name="date"></slot
+          ></span>
         </div>
       </div>
-      <img src="/tellonym-icons-color/icons8-more-24.png" alt="" />
+      <img
+        src="/tellonym-icons-color/icons8-more-24.png"
+        alt=""
+        v-if="isAdmin"
+      />
     </div>
     <div class="tell-body">
       <p class="question">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        <slot name="tell"></slot>
       </p>
       <p class="answer">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua.
+        <slot name="answer"></slot>
       </p>
     </div>
     <div class="tell-footer">
@@ -31,7 +36,9 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+defineProps(['isAdmin'])
+</script>
 <style scoped>
 .tell {
   width: 768px;

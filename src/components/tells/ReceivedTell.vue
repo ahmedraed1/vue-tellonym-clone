@@ -13,13 +13,44 @@
         src="/tellonym-icons-color/icons8-chat-ios-17-outlined/icons8-chat-50.svg"
         alt=""
         class="comment-image"
+        @click="answer"
       />
       <slot name="date"></slot>
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref } from 'vue'
+import axios from 'axios'
+
+const answerText = ref('')
+
+const answer = () => {
+  answerText.value = prompt('Enter your answer')
+
+  if (answerText.value) {
+    axios.put(
+      '/api/v1/tells/' + props.id,
+      {
+        answer: answerText.value,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      },
+    )
+  }
+}
+
+const props = defineProps({
+  id: {
+    type: String,
+    required: true,
+  },
+})
+</script>
 <style scoped>
 .tell {
   width: 768px;

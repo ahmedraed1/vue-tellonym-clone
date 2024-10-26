@@ -1,11 +1,11 @@
 const Tells = require('../models/Tells')
+const User = require('../models/User')
 const { StatusCodes } = require('http-status-codes')
 
 const getTells = async (req, res) => {
-  const tells = await Tells.find(
-    { toUser: req.user.userId },
-    { tell: 1, toUser: 1, isPrivate: 1, createdAt: 1, likes: 1, _id: 0 },
-  ).sort({ createdAt: -1 })
+  const tells = await Tells.find({ toUser: req.user.userId }, { __v: 0 }).sort({
+    createdAt: -1,
+  })
   res.status(StatusCodes.OK).json({ tells })
 }
 
@@ -15,4 +15,26 @@ const sendTell = async (req, res) => {
   await Tells.create({ tell, teller, toUser, isPrivate })
   res.status(StatusCodes.CREATED).json({ message: 'Tell sent successfully' })
 }
-module.exports = { getTells, sendTell }
+
+const answerTell = async (req, res) => {
+  const { id } = req.params
+  const { answer } = req.body
+  await Tells.findOneAndUpdate({ _id: id }, { answer }, { new: true })
+  res.status(StatusCodes.OK).json({ message: 'Answer sent successfully' })
+}
+
+const getTellsByUsername = async (req, res) => {
+  const { username } = req.params
+  const user = await User.findOne({ username })
+  if (!user) {
+    return res.status(StatusCodes.NOT_FOUND).json({ message: 'User not found' })
+  }
+  const id = user._id
+  const tells = await Tells.find(
+    { toUser: id, answer: { $ne: null } },
+    { __v: 0, teller: 0 },
+  ).sort({ createdAt: -1 })
+  res.status(StatusCodes.OK).json({ tells, username: user.username })
+}
+
+module.exports = { getTells, sendTell, answerTell, getTellsByUsername }

@@ -16,6 +16,10 @@ const tellsSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
+    answer: {
+      type: String,
+      default: null,
+    },
     isPrivate: {
       type: Boolean,
       default: false,
@@ -25,7 +29,7 @@ const tellsSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         default: [],
-        unique: true,
+        required: false,
         addedAt: {
           type: Date,
           default: Date.now,
